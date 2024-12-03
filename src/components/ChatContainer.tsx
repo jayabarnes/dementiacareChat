@@ -62,5 +62,3 @@ export const ChatContainer: FC = () => {
     </div>
   );
 };
-
-Version 2 of 2
