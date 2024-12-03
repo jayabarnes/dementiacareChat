@@ -10,14 +10,7 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    include: ['openai']
-  }
-})
-
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  optimizeDeps: {
+    include: ['openai'],
     exclude: ['lucide-react'],
-  },
+  }
 });
