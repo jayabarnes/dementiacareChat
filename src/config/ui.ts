@@ -10,7 +10,7 @@ export interface UiConfig {
 }
 
 export const createUiConfig = (context?: ChatContext): UiConfig => ({
-  title: 'Chat with our dementia care advisor',
+  title: 'The Heart of Dementia Care',
   subtitle: context?.subtitle,
   lessonId: context?.lessonId,
   module: context?.module,
