@@ -13,4 +13,10 @@ export interface ChatState {
   initializeChat: () => void;
 }
 
+export interface ChatContext {
+  subtitle?: string;
+  lessonId?: string;
+  module?: string;
+}
+
 export const SYSTEM_MESSAGE = "You are advising someone who is caring for a person living with dementia.";
