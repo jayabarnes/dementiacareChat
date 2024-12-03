@@ -4,17 +4,11 @@ export interface LLMService {
   generateResponse: (prompt: string, history: Message[]) => Promise<string>;
 }
 
-//new openai service class - written by Claude
-import OpenAI from 'openai';
-
 export class ChatGPTService implements LLMService {
-  private openai: OpenAI;
+  private apiKey: string;
 
   constructor(apiKey: string) {
-    this.openai = new OpenAI({
-      apiKey: apiKey,
-      dangerouslyAllowBrowser: true
-    });
+    this.apiKey = apiKey;
   }
 
   async generateResponse(prompt: string, history: Message[]): Promise<string> {
@@ -27,12 +21,24 @@ export class ChatGPTService implements LLMService {
         { role: 'user', content: prompt }
       ];
 
-      const completion = await this.openai.chat.completions.create({
-        messages: messages as any,
-        model: "gpt-3.5-turbo",
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.apiKey}`
+        },
+        body: JSON.stringify({
+          model: 'gpt-3.5-turbo',
+          messages: messages
+        })
       });
 
-      return completion.choices[0].message.content || '';
+      if (!response.ok) {
+        throw new Error(`API call failed: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data.choices[0].message.content || '';
     } catch (error) {
       console.error('Error calling OpenAI:', error);
       throw error;
@@ -51,7 +57,6 @@ export class MockLLMService implements LLMService {
 // Create service instance based on environment
 const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 console.log(API_KEY ? "OpenAI API key found" : "No OpenAI API key found");
-
 export const llmService: LLMService = API_KEY
   ? new ChatGPTService(API_KEY)
   : new MockLLMService();
