@@ -5,7 +5,7 @@ export interface LLMService {
 }
 
 //new openai service class - written by Claude
-import OpenAI from 'openai/dist/index.js';
+import OpenAI from 'openai';
 
 export class ChatGPTService implements LLMService {
   private openai: OpenAI;
